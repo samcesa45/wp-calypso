@@ -8,6 +8,33 @@
 namespace A8C\FSE\ErrorReporting;
 
 /**
+ * Inline  error handler that will capture errors before
+ * the main handler has a chance to. Errors are pushed
+ * to a global array called `_jsErr` which is then verified
+ * in the main handler. See `./index.js`.
+ */
+function head_error_handler() {
+	// The window.onerror handler can only catch events caused by the current origin, thus, it must be in the main document, or a script loaded from that origin
+	?><script type="text/javascript">
+	  window._headJsErrorHandler = function( errEvent ) {
+			console.log('hi hi')
+			window._jsErr = window._jsErr || [];
+			console.log(errEvent);
+			window._jsErr.push(errEvent);
+		}
+		window.addEventListener('error', window._headJsErrorHandler );
+
+		throw new Error('KABOOOOM');
+		throw new Error('KABOOOOM1');
+		throw new Error('KABOOOOM2');
+		throw new Error('KABOOOOM3');
+		throw new Error('KABOOOOM4');
+		throw new Error('KABOOOOM5');
+	</script><?php
+}
+add_action( "admin_print_scripts",  __NAMESPACE__ . '\head_error_handler');
+
+/**
  * Enqueue assets
  */
 function enqueue_script() {
