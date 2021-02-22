@@ -13,7 +13,7 @@ import { throttle } from 'lodash';
  *
  * @type {number} throttling interval (since the last request) in milliseconds.
  */
-const REPORT_INTERVAL = 60000; // 1 minute
+const REPORT_INTERVAL = 1000; // 1 minute
 
 /**
  * Errors that happened before this script had a chance to load
@@ -23,6 +23,7 @@ const headErrors = window._jsErr || [];
 const headErrorHandler = window._headJsErrorHandler;
 
 const reportError = throttle( ( { error } ) => {
+	debugger;
 	console.log( 'reporting error!', error.message );
 	const data = {
 		message: error.message,
@@ -50,3 +51,5 @@ Promise.all( headErrors.map( reportError ) ).then( () => {
 	delete window._jsErr;
 	delete window._headJsErrorHandler;
 } );
+
+throw new Error( 'CORS error?' );

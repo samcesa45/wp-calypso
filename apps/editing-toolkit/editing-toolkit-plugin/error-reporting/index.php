@@ -17,7 +17,6 @@ function head_error_handler() {
 	// The window.onerror handler can only catch events caused by the current origin, thus, it must be in the main document, or a script loaded from that origin
 	?><script type="text/javascript">
 	  window._headJsErrorHandler = function( errEvent ) {
-			console.log('hi hi')
 			window._jsErr = window._jsErr || [];
 			console.log(errEvent);
 			window._jsErr.push(errEvent);
@@ -50,4 +49,18 @@ function enqueue_script() {
 		true
 	);
 }
-add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_script' );
+add_action( 'init', __NAMESPACE__ . '\enqueue_script', -1000 );
+
+
+/*wp_register_script(
+	'a8c-fse-error-reporting-script',
+	plugins_url( 'dist/error-reporting.js', __FILE__ ),
+	$script_dependencies,
+	$script_version,
+	true
+);
+array_unshift(wp_scripts()->queue, 'a8c-fse-error-reporting-script');*/
+
+
+
+//add_action( 'admin_head', __NAMESPACE__ . '\enqueue_script', 0 );
