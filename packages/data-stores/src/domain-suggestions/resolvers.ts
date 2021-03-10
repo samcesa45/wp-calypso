@@ -40,10 +40,10 @@ export const isAvailable = function* isAvailable( domainName: string ) {
 };
 
 export function* getCategories() {
-	const categories = yield fetchAndParse(
+	const { body } = yield fetchAndParse(
 		'https://public-api.wordpress.com/wpcom/v2/onboarding/domains/categories'
 	);
-	return receiveCategories( categories.body );
+	return receiveCategories( body );
 }
 
 export function* __internalGetDomainSuggestions( queryObject: DomainSuggestionQuery ) {
@@ -54,34 +54,33 @@ export function* __internalGetDomainSuggestions( queryObject: DomainSuggestionQu
 
 	yield fetchDomainSuggestions();
 
-	let suggestions;
 	try {
-		suggestions = yield wpcomRequest( {
+		const suggestions: string | DomainSuggestion[] = yield wpcomRequest( {
 			apiVersion: '1.1',
 			path: '/domains/suggestions',
 			query: stringify( queryObject ),
 		} );
+
+		if ( typeof suggestions === 'string' || ! suggestions ) {
+			// Other internal server errors
+			return receiveDomainSuggestionsError(
+				translate( 'Invalid response from the server' ) as string
+			);
+		}
+
+		const processedSuggestions = suggestions.map( ( suggestion: DomainSuggestion ) => ( {
+			...suggestion,
+			...( suggestion.raw_price &&
+				suggestion.currency_code && {
+					cost: getFormattedPrice( suggestion.raw_price, suggestion.currency_code ),
+				} ),
+		} ) );
+
+		return receiveDomainSuggestionsSuccess( queryObject, processedSuggestions );
 	} catch ( e ) {
 		// e.g. no connection, or JSON parsing error
 		return receiveDomainSuggestionsError(
 			e.message || ( translate( 'Error while fetching server response' ) as string )
 		);
 	}
-
-	if ( ! suggestions || suggestions === '' ) {
-		// Other internal server errors
-		return receiveDomainSuggestionsError(
-			translate( 'Invalid response from the server' ) as string
-		);
-	}
-
-	const processedSuggestions = suggestions.map( ( suggestion: DomainSuggestion ) => ( {
-		...suggestion,
-		...( suggestion.raw_price &&
-			suggestion.currency_code && {
-				cost: getFormattedPrice( suggestion.raw_price, suggestion.currency_code ),
-			} ),
-	} ) );
-
-	return receiveDomainSuggestionsSuccess( queryObject, processedSuggestions );
 }
