@@ -6,6 +6,7 @@ import {
 	LicenseSortField,
 	LicenseState,
 } from 'calypso/jetpack-cloud/sections/partner-portal/types';
+import { APIPartner, Partner } from 'calypso/state/partner-portal/types';
 
 /**
  * Get the state of a license based on its properties.
@@ -141,4 +142,22 @@ export function ensurePartnerPortalReturnUrl( returnToUrl: string ): string {
 	return returnToUrl && returnToUrl.startsWith( '/partner-portal' )
 		? returnToUrl
 		: '/partner-portal';
+}
+
+/**
+ * Format an APIPartner instance to a store-friendly Partner instance.
+ *
+ * @param {APIPartner} partner API partner object to format.
+ * @returns {Partner} Formatted store-friendly Partner object.
+ */
+export function formatApiPartner( partner: APIPartner ): Partner {
+	return {
+		...partner,
+		keys: partner.keys.map( ( key ) => ( {
+			id: key.id,
+			name: key.name,
+			oAuth2Token: key.oauth2_token,
+			disabledOn: key.disabled_on,
+		} ) ),
+	};
 }

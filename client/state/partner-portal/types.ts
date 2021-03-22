@@ -37,6 +37,21 @@ export interface APIError {
 	message: string;
 }
 
+export interface APIPartnerKey {
+	id: number;
+	name: string;
+	oauth2_token: string;
+	disabled_on: string | null;
+}
+
+export interface APIPartner {
+	id: number;
+	slug: string;
+	name: string;
+	keys: APIPartnerKey[];
+	tos: boolean;
+}
+
 /**
  * Store.
  */
@@ -52,6 +67,7 @@ export interface Partner {
 	slug: string;
 	name: string;
 	keys: PartnerKey[];
+	tos: boolean;
 }
 
 export interface PartnerStore {
