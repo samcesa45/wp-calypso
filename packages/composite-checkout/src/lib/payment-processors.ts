@@ -29,6 +29,10 @@ export function usePaymentProcessors(): Record< string, PaymentProcessorFunction
 	return paymentProcessors;
 }
 
+export function makeErrorResponse( url: string ): PaymentProcessorRedirect {
+	return { type: PaymentProcessorResponseType.ERROR, payload: url };
+}
+
 export function makeSuccessResponse(
 	transaction: PaymentProcessorResponseData
 ): PaymentProcessorSuccess {
