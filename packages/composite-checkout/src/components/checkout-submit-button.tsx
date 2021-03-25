@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useI18n } from '@automattic/react-i18n';
 
 /**
@@ -24,7 +24,26 @@ export default function CheckoutSubmitButton( {
 	const { formStatus } = useFormStatus();
 	const { __ } = useI18n();
 	const isDisabled = disabled || formStatus !== FormStatus.READY;
-	const onClick = useProcessPayment();
+	const processPayment = useProcessPayment();
+
+	// processPayment may throw an error, but because it's an async function,
+	// that error will not trigger any React error boundaries around this
+	// component (error boundaries only catch errors that occur during render).
+	// Since we want to know about processing errors, we can cause an error to
+	// occur during render of this button if processPayment throws an error using
+	// the below technique. See
+	// https://github.com/facebook/react/issues/14981#issuecomment-468460187
+	const [ , setErrorState ] = useState();
+	const onClick = useCallback(
+		async ( paymentMethodId, data ) => {
+			return processPayment( paymentMethodId, data ).catch( ( error: Error ) => {
+				setErrorState( () => {
+					throw error;
+				} );
+			} );
+		},
+		[ processPayment ]
+	);
 
 	const paymentMethod = usePaymentMethod();
 	if ( ! paymentMethod ) {
