@@ -14,8 +14,8 @@ class Block_Patterns_Utils {
 	/**
 	 * Make remote get requests.
 	 *
-	 * @param  string The request URL
-	 * @return array  The response
+	 * @param string $request_url The request URL.
+	 * @return array              The response.
 	 */
 	public function remote_get( $request_url ) {
 		$args = array( 'timeout' => 20 );
@@ -49,9 +49,9 @@ class Block_Patterns_Utils {
 	/**
 	 * A wrapper for wp_cache_get.
 	 *
-	 * @param int|string   $key   The key under which the cache contents are stored.
-	 * @param string       $group Optional. Where the cache contents are grouped. Default empty.
-	 * @return mixed|false         The cache contents on success, false on failure to retrieve contents.
+	 * @param int|string $key The key under which the cache contents are stored.
+	 * @param string     $group Optional. Where the cache contents are grouped. Default empty.
+	 * @return mixed|false      The cache contents on success, false on failure to retrieve contents.
 	 */
 	public function cache_get( $key, $group ) {
 		return wp_cache_get( $key, $group );
@@ -60,6 +60,7 @@ class Block_Patterns_Utils {
 	/**
 	 * Returns the sha1 hash of a concatenated string to use as a cache key.
 	 *
+	 * @param string $patterns_slug A slug for a patterns source site, e.g., `block_patterns`.
 	 * @return string locale slug
 	 */
 	public function get_patterns_cache_key( $patterns_slug ) {
