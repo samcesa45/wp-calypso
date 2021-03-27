@@ -83,7 +83,7 @@ function useHandlePaymentProcessorResponse() {
 				)
 				.catch( ( error: Error ) => {
 					setTransactionError( error.message );
-					// See note above about transforming an async error into a runtime error
+					// See note above about transforming an async error into a render-time error
 					setErrorState( () => {
 						throw error;
 					} );
