@@ -9,7 +9,7 @@ import type PageJS from 'page';
  * Internal dependencies
  */
 import { addQueryArgs } from 'calypso/lib/route';
-import { getActivePartnerKey } from 'calypso/state/partner-portal/partner/selectors';
+import { getActivePartnerKeyId } from 'calypso/state/partner-portal/partner/selectors';
 import {
 	publicToInternalLicenseFilter,
 	publicToInternalLicenseSortField,
@@ -72,7 +72,7 @@ export function issueLicenseContext( context: PageJS.Context, next: () => void )
 
 export function requirePartnerKeyContext( context: PageJS.Context, next: () => void ): void {
 	const state = context.store.getState();
-	const hasKey = getActivePartnerKey( state );
+	const hasKey = getActivePartnerKeyId( state );
 	const { pathname, search } = window.location;
 
 	if ( hasKey ) {
