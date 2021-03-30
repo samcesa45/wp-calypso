@@ -34,7 +34,10 @@ interface Props {
 const DesignPicker: React.FC< Props > = ( {
 	locale,
 	onSelect,
-	designs = availableDesigns.featured,
+	designs = availableDesigns.featured.filter(
+		// By default, exclude anchorfm-specific designs
+		( design ) => design.features.findIndex( ( f ) => f === 'anchorfm' ) < 0
+	),
 	premiumBadge,
 	isGridMinimal,
 } ) => {
