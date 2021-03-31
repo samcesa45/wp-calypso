@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import {
 	createI18n,
-	I18n,
+	I18n as WpI18n,
 	LocaleData,
 	__,
 	_n,
@@ -17,6 +17,9 @@ import {
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { createHooks } from '@wordpress/hooks';
 import type { addFilter, removeFilter, hasFilter, applyFilters } from '@wordpress/hooks';
+
+// @automattic/react-i18n doesn't use all of the functions available in @wordpress/i18n
+type I18n = Omit< WpI18n, 'getLocaleData' | 'hasTranslation' | 'subscribe' >;
 
 /**
  * Default i18n instance.
