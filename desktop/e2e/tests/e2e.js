@@ -15,6 +15,8 @@ const options = new chrome.Options();
 options.addArguments(
 	'user-agent=Mozilla/5.0 (wp-e2e-tests) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.128 Electron/8.3.0 Safari/537.36'
 );
+options.addArguments( '--no-sandbox' );
+
 const driverConfig = new webdriver.Builder()
 	.usingServer( 'http://localhost:9515' )
 	.setChromeOptions( options )
