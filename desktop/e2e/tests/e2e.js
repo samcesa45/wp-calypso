@@ -22,7 +22,12 @@ const driverConfig = new webdriver.Builder()
 		chromeOptions: {
 			// Here is the path to your Electron binary.
 			binary: process.env.BINARY_PATH,
-			args: [ '--disable-renderer-backgrounding', '--disable-http-cache', '--start-maximized' ],
+			args: [
+				'--no-sandbox',
+				'--disable-renderer-backgrounding',
+				'--disable-http-cache',
+				'--start-maximized',
+			],
 			debuggerAddress: '127.0.0.1:9222',
 		},
 	} )
