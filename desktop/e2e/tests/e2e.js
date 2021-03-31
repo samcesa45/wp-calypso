@@ -21,7 +21,7 @@ const driverConfig = new webdriver.Builder()
 	.usingServer( 'http://localhost:9515' )
 	.setChromeOptions( options )
 	.withCapabilities( {
-		chromeOptions: {
+		'goog:chromeOptions': {
 			// Here is the path to your Electron binary.
 			binary: process.env.BINARY_PATH,
 			args: [
